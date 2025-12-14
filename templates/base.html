@@ -16,7 +16,7 @@
 <body>
     <nav class="navbar">
         <a href="{% url 'project_list' %}" class="navbar-brand" style="display: flex; align-items: center; gap: 10px;">
-            <img src="{{ MEDIA_URL }}FUD logo.png" alt="FUD Logo" style="height: 40px;">
+            <img src="{% static 'img/FUD logo.png' %}" alt="FUD Logo" style="height: 40px;">
             FUDiscover
         </a>
         <div class="nav-links">
@@ -56,7 +56,8 @@
 
     <footer
         style="text-align: center; padding: 2rem; color: var(--secondary-color); display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-        <img src="{{ MEDIA_URL }}Faculty of computing Logo.png" alt="Faculty Logo" style="height: 50px; opacity: 0.8;">
+        <img src="{% static 'img/Faculty of computing Logo.png' %}" alt="Faculty Logo"
+            style="height: 50px; opacity: 0.8;">
         <div>&copy; 2025 Federal University Dutse - Computer Science Dept.</div>
     </footer>
 </body>
