@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm # Or custom form dealing with custom user
 from .models import User, StudentProfile, SupervisorProfile
+from django import forms
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Unified Registration Form
 class UserRegistrationForm(UserCreationForm):
