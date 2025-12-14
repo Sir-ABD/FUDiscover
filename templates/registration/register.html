@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 2rem auto;">
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 1.5rem;">Student Registration</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 0.5rem;">{{ field.label }}</label>
+                {{ field.errors }}
+                <div class="control">
+                    {{ field }}
+                </div>
+                {% if field.help_text %}
+                <small style="color: var(--secondary-color);">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Register</button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem;">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+    </div>
+</div>
+<style>
+    input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('{{ MEDIA_URL }}Faculty building.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    .card {
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+</style>
+{% endblock %}

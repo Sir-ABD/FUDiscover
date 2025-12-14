@@ -1,0 +1,8 @@
+Django>=5.0
+whitenoise
+python-Levenshtein
+scikit-learn
+Pillow
+gunicorn
+dj-database-url
+psycopg2-binary

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h1>Upload Final Year Project</h1>
+    <p style="margin-bottom: 2rem; color: var(--secondary-color);">Please ensure your title is unique and abstract is
+        original. Plagiarism checks will run upon submission.</p>
+
+    <div class="card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">{{ field.label }}</label>
+                {{ field.errors }}
+                <!-- Manually rendering widget with class if not added in python -->
+                <div class="control">
+                    {{ field }}
+                </div>
+                {% if field.help_text %}
+                <small style="color: var(--secondary-color);">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Submit Project</button>
+        </form>
+    </div>
+</div>
+<!-- Add some simple css for form fields just in case -->
+<style>
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    input[type="file"],
+    select {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}

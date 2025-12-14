@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section" style="
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{{ MEDIA_URL }}FUD main gate.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 6rem 1rem;
+    text-align: center;
+    border-radius: var(--border-radius);
+    margin-bottom: 3rem;
+">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Discover Past Projects</h1>
+    <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto 2rem;">
+        The official digital archive for Federal University Dutse.
+        Search by title, abstract, or graduation year.
+    </p>
+
+    <form method="get" action="." style="max-width: 600px; margin: 0 auto; display: flex; gap: 10px;">
+        <input type="text" name="q" class="form-control" placeholder="Search keywords..." value="{{ query|default:'' }}"
+            style="margin-bottom: 0; border: none; padding: 1rem;">
+        <button type="submit" class="btn btn-primary" style="padding: 0 2rem;">Search</button>
+    </form>
+</div>
+
+<div class="project-grid">
+    {% for project in projects %}
+    <div class="card">
+        <h3><a href="{% url 'project_detail' project.pk %}" style="text-decoration: none; color: inherit;">{{
+                project.title }}</a></h3>
+        <p style="color: var(--secondary-color); font-size: 0.9em;">
+            by {{ project.student.get_full_name|default:project.student.username }} | {{ project.year }}
+            <br>
+            <span style="font-size: 0.9em;">Supervisor: {{
+                project.supervisor_name|default:project.supervisor.get_full_name|default:"Not Assigned" }}</span>
+        </p>
+        <p>{{ project.abstract|truncatewords:30 }}</p>
+        <a href="{% url 'project_detail' project.pk %}" style="color: var(--primary-color); font-weight: 500;">Read
+            Abstract &rarr;</a>
+    </div>
+    {% empty %}
+    <div style="text-align: center; color: var(--secondary-color);">
+        <p>No projects found matching your search.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

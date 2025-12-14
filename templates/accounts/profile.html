@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+    <!-- Profile Sidebar -->
+    <div style="flex: 1; min-width: 300px;">
+        <div class="card">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div
+                    style="width: 100px; height: 100px; background: #e9ecef; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 1rem;">
+                    {{ user.username|make_list|first|upper }}
+                </div>
+                <h2>{{ user.get_full_name|default:user.username }}</h2>
+                <p style="color: var(--secondary-color);">{{ user.email }}</p>
+                <div
+                    style="display: inline-block; padding: 0.3rem 0.8rem; background: #0d6efd20; color: var(--primary-color); border-radius: 20px; font-size: 0.9rem; font-weight: 500;">
+                    {% if user.is_student %}Student{% elif user.is_supervisor %}Supervisor{% else %}User{% endif %}
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 1.5rem 0;">
+
+            {% if user.is_student and user.student_profile %}
+            <div>
+                <p><strong>Reg No:</strong> <br> {{ user.student_profile.reg_no }}</p>
+                <p><strong>Graduation Year:</strong> <br> {{ user.student_profile.graduation_year }}</p>
+            </div>
+            {% elif user.is_supervisor and user.supervisor_profile %}
+            <div>
+                <p><strong>Department:</strong> <br> {{ user.supervisor_profile.department }}</p>
+                <p><strong>Staff ID:</strong> <br> {{ user.supervisor_profile.staff_id }}</p>
+            </div>
+            {% endif %}
+
+            <form action="{% url 'logout' %}" method="post" style="margin-top: 2rem;">
+                {% csrf_token %}
+                <button type="submit" class="btn"
+                    style="width: 100%; border: 1px solid #dc3545; color: #dc3545; background: white;">Sign Out</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div style="flex: 2; min-width: 300px;">
+        <h2 style="margin-bottom: 1.5rem;">Your Projects</h2>
+
+        {% if projects %}
+        {% for project in projects %}
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h3 style="margin-top: 0;"><a href="{% url 'project_detail' project.pk %}"
+                            style="text-decoration: none; color: inherit;">{{ project.title }}</a></h3>
+                    <p style="color: var(--secondary-color); font-size: 0.9em; margin-bottom: 0.5rem;">
+                        Uploaded: {{ project.uploaded_at|date:"M d, Y" }}
+                    </p>
+                </div>
+                <span style="padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; 
+                        background: {% if project.is_approved %}#d1e7dd{% else %}#fff3cd{% endif %}; 
+                        color: {% if project.is_approved %}#0f5132{% else %}#856404{% endif %};">
+                    {% if project.is_approved %}Approved{% else %}Pending{% endif %}
+                </span>
+            </div>
+            <p>{{ project.abstract|truncatewords:20 }}</p>
+            <div style="margin-top: 1rem;">
+                {% if project.document_file %}
+                <a href="{{ project.document_file.url }}" style="font-size: 0.9rem; margin-right: 1rem;">Download
+                    Doc</a>
+                {% endif %}
+                {% if project.source_code %}
+                <a href="{{ project.source_code.url }}" style="font-size: 0.9rem;">Download Code</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="card" style="text-align: center; padding: 3rem;">
+            <p style="color: var(--secondary-color);">You haven't uploaded any projects yet.</p>
+            {% if user.is_student %}
+            <a href="{% url 'upload_project' %}" class="btn btn-primary" style="margin-top: 1rem;">Upload First
+                Project</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

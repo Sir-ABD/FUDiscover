@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FUDiscover{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Outfit:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{% url 'project_list' %}" class="navbar-brand" style="display: flex; align-items: center; gap: 10px;">
+            <img src="{{ MEDIA_URL }}FUD logo.png" alt="FUD Logo" style="height: 40px;">
+            FUDiscover
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'project_list' %}">Browse</a>
+            {% if user.is_authenticated %}
+            {% if user.is_student %}
+            <a href="{% url 'upload_project' %}">Upload Project</a>
+            {% endif %}
+            <a href="{% url 'profile' %}"
+                style="margin-left: 1rem; text-decoration: none; color: inherit; font-weight: 500;">
+                Hello, {{ user.username }}
+            </a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background:none; color:inherit; padding:0;">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="card" style="background-color: #d1e7dd; color: #0f5132; padding: 1rem;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer
+        style="text-align: center; padding: 2rem; color: var(--secondary-color); display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+        <img src="{{ MEDIA_URL }}Faculty of computing Logo.png" alt="Faculty Logo" style="height: 50px; opacity: 0.8;">
+        <div>&copy; 2025 Federal University Dutse - Computer Science Dept.</div>
+    </footer>
+</body>
+
+</html>
